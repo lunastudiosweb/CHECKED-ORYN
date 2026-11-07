@@ -1,0 +1,91 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 23px;
+    border-radius: var(--radius-small);
+    font-size: 13px;
+    font-weight: 700;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.button-light {
+    background: white;
+    color: black;
+}
+
+.button-light:hover {
+    background: #dcdcdc;
+    transform: translateY(-2px);
+}
+
+.button-outline {
+    border: 1px solid var(--border-hover);
+    color: white;
+}
+
+.button-outline:hover {
+    background: white;
+    color: black;
+}
+
+.button-small {
+    padding: 11px 18px;
+    font-size: 12px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    padding: 30px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    background: var(--surface-light);
+    border-color: var(--border-hover);
+    transform: translateY(-5px);
+}
+
+.feature-number {
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin: 35px 0 18px;
+}
+
+.feature-card h3 {
+    font-size: 19px;
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.feature-link {
+    display: block;
+    margin-top: 35px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+}
