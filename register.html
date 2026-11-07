@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | CHECKED ORYN</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+    <main class="auth-container">
+        <a href="index.html" class="brand">
+            <span class="brand-symbol">O</span>
+            CHECKED ORYN
+        </a>
+
+        <section class="auth-card">
+            <div class="auth-heading">
+                <span class="eyebrow">JOIN THE COMMUNITY</span>
+                <h1>Create your account.</h1>
+                <p>One account. A whole new way to connect.</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Choose a username"
+                        minlength="3"
+                        maxlength="24"
+                        pattern="[a-zA-Z0-9_]+"
+                        autocomplete="username"
+                        required
+                    >
+                    <small>3–24 characters. Letters, numbers and underscores.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                    <small>At least 8 characters.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Enter your password again"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div id="registerMessage" class="message" role="status"></div>
+
+                <button type="submit" id="registerButton">
+                    Create account
+                    <span>→</span>
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="login.html">Log in</a>
+            </p>
+        </section>
+
+        <footer>
+            CHECKED ORYN © <span id="year"></span>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+
+</body>
+</html>
