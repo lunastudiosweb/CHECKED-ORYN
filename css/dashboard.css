@@ -1,1 +1,381 @@
 
+.dashboard {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr) 290px;
+    background: #090909;
+    color: #f5f5f5;
+}
+
+.dashboard-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 30px 20px;
+    border-right: 1px solid #222;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-logo {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 48px;
+}
+
+.sidebar-label {
+    color: #666;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0 0 14px 10px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 14px;
+    border-radius: 9px;
+    color: #999;
+    text-decoration: none;
+    font-size: 14px;
+    transition: .2s ease;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    background: #1c1c1c;
+    color: white;
+}
+
+.sidebar-nav a.active {
+    border: 1px solid #303030;
+}
+
+.sidebar-icon {
+    width: 19px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.dashboard-main {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 35px 38px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.dashboard-header h1 {
+    font-size: 26px;
+    letter-spacing: -1px;
+}
+
+.dashboard-header p {
+    color: #777;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.header-avatar,
+.profile-avatar {
+    display: grid;
+    place-items: center;
+    background: #242424;
+    border: 1px solid #383838;
+    border-radius: 50%;
+    color: white;
+    font-weight: 700;
+}
+
+.header-avatar {
+    width: 42px;
+    height: 42px;
+}
+
+.welcome-card {
+    padding: 28px;
+    border: 1px solid #292929;
+    background: linear-gradient(135deg, #191919, #101010);
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.welcome-card .eyebrow {
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.welcome-card h2 {
+    font-size: 25px;
+    margin: 13px 0 8px;
+}
+
+.welcome-card p {
+    color: #888;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.feed-section h2 {
+    font-size: 17px;
+    margin-bottom: 17px;
+}
+
+.post-composer,
+.feed-empty {
+    border: 1px solid #292929;
+    background: #111;
+    border-radius: 13px;
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.composer-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 17px;
+}
+
+.composer-top span {
+    color: #aaa;
+    font-size: 13px;
+}
+
+.composer-input {
+    width: 100%;
+    min-height: 85px;
+    resize: vertical;
+    border: 1px solid #292929;
+    border-radius: 9px;
+    padding: 14px;
+    background: #171717;
+    color: white;
+    font: inherit;
+    outline: none;
+}
+
+.composer-input:focus {
+    border-color: #666;
+}
+
+.composer-input::placeholder {
+    color: #666;
+}
+
+.composer-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+}
+
+.composer-footer span {
+    color: #666;
+    font-size: 11px;
+}
+
+.primary-button {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 18px;
+    background: white;
+    color: black;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primary-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.feed-empty {
+    text-align: center;
+    padding: 48px 20px;
+}
+
+.feed-empty h3 {
+    font-size: 16px;
+    margin-bottom: 9px;
+}
+
+.feed-empty p {
+    color: #777;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.dashboard-right {
+    padding: 35px 22px;
+    border-left: 1px solid #222;
+}
+
+.right-card {
+    padding: 20px;
+    border: 1px solid #292929;
+    background: #111;
+    border-radius: 13px;
+    margin-bottom: 17px;
+}
+
+.right-card h3 {
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.profile-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+}
+
+.profile-preview strong {
+    display: block;
+    font-size: 13px;
+}
+
+.profile-preview span {
+    display: block;
+    color: #777;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.profile-details {
+    border-top: 1px solid #292929;
+    margin-top: 18px;
+    padding-top: 14px;
+}
+
+.profile-details p {
+    color: #888;
+    font-size: 12px;
+    margin: 9px 0;
+    overflow-wrap: anywhere;
+}
+
+.profile-details strong {
+    color: #eee;
+}
+
+.logout-button {
+    width: 100%;
+    border: 1px solid #333;
+    background: transparent;
+    color: #aaa;
+    border-radius: 8px;
+    padding: 11px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.logout-button:hover {
+    background: #202020;
+    color: white;
+}
+
+.dashboard-footer {
+    color: #555;
+    font-size: 11px;
+    margin-top: 35px;
+}
+
+@media (max-width: 1100px) {
+    .dashboard {
+        grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .dashboard-right {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard {
+        display: block;
+        padding-bottom: 75px;
+    }
+
+    .dashboard-sidebar {
+        position: fixed;
+        z-index: 10;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        padding: 8px 5px;
+        background: #101010;
+        border-right: 0;
+        border-top: 1px solid #292929;
+    }
+
+    .dashboard-logo,
+    .sidebar-label,
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 2px;
+    }
+
+    .sidebar-nav a {
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        padding: 9px 2px;
+        font-size: 10px;
+    }
+
+    .sidebar-icon {
+        font-size: 17px;
+    }
+
+    .dashboard-main {
+        padding: 25px 17px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 22px;
+    }
+
+    .welcome-card {
+        padding: 22px;
+    }
+}
+
