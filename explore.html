@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Explore — CHECKED ORYN</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/explore.css">
+</head>
+
+<body>
+
+<div class="explore-layout">
+
+    <aside class="explore-sidebar">
+        <a href="home.html" class="explore-brand">
+            <span class="brand-symbol">◈</span>
+            CHECKED ORYN
+        </a>
+
+        <nav class="explore-navigation">
+            <a href="home.html">⌂ Home</a>
+            <a href="explore.html" class="active">⌕ Explore</a>
+            <a href="communities.html">◈ Communities</a>
+            <a href="messages.html">▤ Messages</a>
+            <a href="notifications.html">♧ Notifications</a>
+            <a href="profile.html">◎ Profile</a>
+            <a href="settings.html">⚙ Settings</a>
+        </nav>
+
+        <div class="explore-sidebar-bottom">
+            <span>CHECKED ORYN</span>
+            <small>Connect. Share. Belong.</small>
+        </div>
+    </aside>
+
+    <main class="explore-main">
+
+        <header class="explore-header">
+            <div>
+                <span class="explore-eyebrow">DISCOVER SOMETHING NEW</span>
+                <h1>Explore</h1>
+                <p>Find people, conversations and ideas.</p>
+            </div>
+
+            <a href="home.html" class="explore-home-link">
+                Back to Home
+            </a>
+        </header>
+
+        <section class="explore-search-section">
+
+            <div class="explore-search-box">
+                <span>⌕</span>
+                <input
+                    type="search"
+                    id="exploreSearch"
+                    placeholder="Search posts or people..."
+                    autocomplete="off"
+                >
+                <button id="clearSearch" type="button">Clear</button>
+            </div>
+
+            <div class="explore-tabs">
+                <button class="explore-tab active" data-tab="posts">
+                    Posts
+                </button>
+
+                <button class="explore-tab" data-tab="people">
+                    People
+                </button>
+            </div>
+
+        </section>
+
+        <section class="explore-content">
+
+            <div class="explore-section-heading">
+                <div>
+                    <h2 id="resultsTitle">Recent posts</h2>
+                    <p id="resultsDescription">
+                        See what everyone is sharing.
+                    </p>
+                </div>
+
+                <select id="postSort" aria-label="Sort posts">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                </select>
+            </div>
+
+            <div id="exploreResults" class="explore-results">
+                <div class="explore-loading">Loading Explore...</div>
+            </div>
+
+            <div id="exploreMessage" class="explore-message"></div>
+
+        </section>
+
+        <footer class="explore-footer">
+            CHECKED ORYN © <span id="exploreYear"></span>
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/explore.js"></script>
+
+</body>
+</html>
