@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Home — CHECKED ORYN</title>
 
     <link rel="stylesheet" href="css/variables.css">
@@ -12,153 +13,261 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
+
 <body>
 
 <div class="dashboard">
 
+    <!-- SIDEBAR -->
     <aside class="dashboard-sidebar">
-        <a href="index.html" class="dashboard-logo">CHECKED ORYN</a>
+
+        <a href="index.html" class="dashboard-logo">
+            CHECKED ORYN
+        </a>
 
         <p class="sidebar-label">YOUR SPACE</p>
 
         <nav class="sidebar-nav">
+
             <a href="home.html" class="active">
-                <span class="sidebar-icon">⌂</span> Home
+                <span class="sidebar-icon">⌂</span>
+                Home
             </a>
 
             <a href="explore.html">
-                <span class="sidebar-icon">⌕</span> Explore
+                <span class="sidebar-icon">⌕</span>
+                Explore
             </a>
 
             <a href="communities.html">
-                <span class="sidebar-icon">◈</span> Communities
+                <span class="sidebar-icon">◈</span>
+                Communities
             </a>
 
             <a href="messages.html">
-                <span class="sidebar-icon">▤</span> Messages
+                <span class="sidebar-icon">▤</span>
+                Messages
             </a>
 
             <a href="notifications.html">
-                <span class="sidebar-icon">♧</span> Notifications
+                <span class="sidebar-icon">♧</span>
+                Notifications
             </a>
+
         </nav>
 
         <div class="sidebar-bottom">
+
             <p class="sidebar-label">ACCOUNT</p>
 
             <nav class="sidebar-nav">
+
                 <a href="profile.html">
-                    <span class="sidebar-icon">◉</span> Profile
+                    <span class="sidebar-icon">◉</span>
+                    Profile
                 </a>
 
                 <a href="settings.html">
-                    <span class="sidebar-icon">⚙</span> Settings
+                    <span class="sidebar-icon">⚙</span>
+                    Settings
                 </a>
+
             </nav>
+
         </div>
+
     </aside>
 
+
+    <!-- MAIN CONTENT -->
     <main class="dashboard-main">
 
         <header class="dashboard-header">
+
             <div>
                 <h1>Home</h1>
                 <p>Your space. Your people. Your conversations.</p>
             </div>
 
-            <div class="header-avatar" id="headerAvatar">?</div>
+            <div class="header-avatar" id="headerAvatar">
+                ?
+            </div>
+
         </header>
 
-        <section class="welcome-card">
-            <span class="eyebrow">WELCOME TO CHECKED ORYN</span>
 
-            <h2>Welcome back, <span id="welcomeName">...</span>.</h2>
+        <!-- WELCOME -->
+        <section class="welcome-card">
+
+            <span class="eyebrow">
+                WELCOME TO CHECKED ORYN
+            </span>
+
+            <h2>
+                Welcome back,
+                <span id="welcomeName">...</span>.
+            </h2>
 
             <p>
                 This is your space to connect, share ideas,
                 discover communities, and belong.
             </p>
+
         </section>
 
+
+        <!-- SOCIAL FEED -->
         <section class="feed-section">
+
             <h2>Your feed</h2>
 
+
+            <!-- POST COMPOSER -->
             <div class="post-composer">
+
                 <div class="composer-top">
-                    <div class="profile-avatar" id="composerAvatar">?</div>
-                    <span>Share something with CHECKED ORYN.</span>
+
+                    <div class="profile-avatar" id="composerAvatar">
+                        ?
+                    </div>
+
+                    <span>
+                        Share something with CHECKED ORYN.
+                    </span>
+
                 </div>
 
                 <textarea
                     class="composer-input"
+                    id="postContent"
+                    maxlength="2000"
                     placeholder="What's happening?"
-                    disabled
                 ></textarea>
 
                 <div class="composer-footer">
-                    <span>Post creation is coming next.</span>
-                    <button class="primary-button" disabled>
-                        Create post
+
+                    <span id="postMessage">
+                        Share your thoughts.
+                    </span>
+
+                    <button
+                        class="primary-button"
+                        id="publishPost"
+                        type="button"
+                    >
+                        Publish
                     </button>
+
                 </div>
+
             </div>
 
-            <div class="feed-empty">
-                <h3>Your feed starts here.</h3>
 
-                <p>
-                    Posts from people and communities you follow
-                    will appear here.
-                </p>
+            <!-- POSTS -->
+            <div id="postsFeed">
+
+                <div class="feed-empty">
+                    <h3>Loading your feed...</h3>
+
+                    <p>
+                        Finding the latest posts.
+                    </p>
+                </div>
+
             </div>
+
         </section>
 
+
+        <!-- FOOTER -->
         <footer class="dashboard-footer">
             CHECKED ORYN © <span id="year"></span>
         </footer>
 
     </main>
 
+
+    <!-- RIGHT SIDEBAR -->
     <aside class="dashboard-right">
 
         <div class="right-card">
+
             <h3>YOUR ACCOUNT</h3>
 
             <div class="profile-preview">
-                <div class="profile-avatar" id="profileAvatar">?</div>
+
+                <div class="profile-avatar" id="profileAvatar">
+                    ?
+                </div>
 
                 <div>
-                    <strong id="profileDisplayName">Loading...</strong>
-                    <span id="profileUsername">@loading</span>
+
+                    <strong id="profileDisplayName">
+                        Loading...
+                    </strong>
+
+                    <span id="profileUsername">
+                        @loading
+                    </span>
+
                 </div>
+
             </div>
+
 
             <div class="profile-details">
-                <p>Username: <strong id="profileUsernameDetail">...</strong></p>
-                <p>Email: <strong id="profileEmail">...</strong></p>
+
+                <p>
+                    Username:
+                    <strong id="profileUsernameDetail">
+                        ...
+                    </strong>
+                </p>
+
+                <p>
+                    Email:
+                    <strong id="profileEmail">
+                        ...
+                    </strong>
+                </p>
+
             </div>
 
-            <button class="logout-button" id="logoutButton">
+
+            <button
+                class="logout-button"
+                id="logoutButton"
+                type="button"
+            >
                 Log out
             </button>
+
         </div>
 
+
         <div class="right-card">
+
             <h3>ABOUT ORYN</h3>
 
             <p style="color:#888;font-size:12px;line-height:1.8;">
                 A place to connect, discover communities,
                 share experiences, and build connections.
             </p>
+
         </div>
 
     </aside>
 
 </div>
 
+
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- APPLICATION SCRIPTS -->
 <script src="js/supabase.js"></script>
 <script src="js/home.js"></script>
+<script src="js/social.js"></script>
 
 </body>
 </html>
