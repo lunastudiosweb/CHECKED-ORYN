@@ -4,86 +4,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | CHECKED ORYN</title>
-    <link rel="stylesheet" href="css/auth.css">
-    <style>
-        .dashboard {
-            width: 100%;
-            max-width: 700px;
-            padding: 40px;
-            background: #111;
-            border: 1px solid #252525;
-            border-radius: 18px;
-        }
+    <title>Home — CHECKED ORYN</title>
 
-        .dashboard h1 {
-            margin: 15px 0;
-            font-size: 34px;
-        }
-
-        .dashboard p {
-            color: #999;
-            line-height: 1.7;
-        }
-
-        .profile-info {
-            margin: 28px 0;
-            padding: 20px;
-            background: #191919;
-            border: 1px solid #303030;
-            border-radius: 12px;
-        }
-
-        .profile-info strong {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .logout-button {
-            justify-content: center;
-            background: #292929;
-            color: white;
-        }
-
-        .logout-button:hover {
-            background: #444;
-        }
-
-        @media (max-width: 480px) {
-            .dashboard { padding: 25px; }
-        }
-    </style>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <main class="auth-container">
-        <a href="index.html" class="brand">
-            <span class="brand-symbol">O</span>
-            CHECKED ORYN
-        </a>
 
-        <section class="dashboard">
-            <span class="eyebrow">YOUR SPACE</span>
-            <h1>Welcome, <span id="welcomeName">...</span>.</h1>
-            <p>You're now inside CHECKED ORYN. Your account is connected and your next chapter starts here.</p>
+<div class="dashboard">
 
-            <div class="profile-info">
-                <strong>Your account</strong>
-                <p>Username: <span id="profileUsername">Loading...</span></p>
-                <p>Email: <span id="profileEmail">Loading...</span></p>
+    <aside class="dashboard-sidebar">
+        <a href="index.html" class="dashboard-logo">CHECKED ORYN</a>
+
+        <p class="sidebar-label">YOUR SPACE</p>
+
+        <nav class="sidebar-nav">
+            <a href="home.html" class="active">
+                <span class="sidebar-icon">⌂</span> Home
+            </a>
+
+            <a href="explore.html">
+                <span class="sidebar-icon">⌕</span> Explore
+            </a>
+
+            <a href="communities.html">
+                <span class="sidebar-icon">◈</span> Communities
+            </a>
+
+            <a href="messages.html">
+                <span class="sidebar-icon">▤</span> Messages
+            </a>
+
+            <a href="notifications.html">
+                <span class="sidebar-icon">♧</span> Notifications
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p class="sidebar-label">ACCOUNT</p>
+
+            <nav class="sidebar-nav">
+                <a href="profile.html">
+                    <span class="sidebar-icon">◉</span> Profile
+                </a>
+
+                <a href="settings.html">
+                    <span class="sidebar-icon">⚙</span> Settings
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Home</h1>
+                <p>Your space. Your people. Your conversations.</p>
+            </div>
+
+            <div class="header-avatar" id="headerAvatar">?</div>
+        </header>
+
+        <section class="welcome-card">
+            <span class="eyebrow">WELCOME TO CHECKED ORYN</span>
+
+            <h2>Welcome back, <span id="welcomeName">...</span>.</h2>
+
+            <p>
+                This is your space to connect, share ideas,
+                discover communities, and belong.
+            </p>
+        </section>
+
+        <section class="feed-section">
+            <h2>Your feed</h2>
+
+            <div class="post-composer">
+                <div class="composer-top">
+                    <div class="profile-avatar" id="composerAvatar">?</div>
+                    <span>Share something with CHECKED ORYN.</span>
+                </div>
+
+                <textarea
+                    class="composer-input"
+                    placeholder="What's happening?"
+                    disabled
+                ></textarea>
+
+                <div class="composer-footer">
+                    <span>Post creation is coming next.</span>
+                    <button class="primary-button" disabled>
+                        Create post
+                    </button>
+                </div>
+            </div>
+
+            <div class="feed-empty">
+                <h3>Your feed starts here.</h3>
+
+                <p>
+                    Posts from people and communities you follow
+                    will appear here.
+                </p>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            CHECKED ORYN © <span id="year"></span>
+        </footer>
+
+    </main>
+
+    <aside class="dashboard-right">
+
+        <div class="right-card">
+            <h3>YOUR ACCOUNT</h3>
+
+            <div class="profile-preview">
+                <div class="profile-avatar" id="profileAvatar">?</div>
+
+                <div>
+                    <strong id="profileDisplayName">Loading...</strong>
+                    <span id="profileUsername">@loading</span>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <p>Username: <strong id="profileUsernameDetail">...</strong></p>
+                <p>Email: <strong id="profileEmail">...</strong></p>
             </div>
 
             <button class="logout-button" id="logoutButton">
                 Log out
             </button>
+        </div>
 
-            <div id="homeMessage" class="message" role="status"></div>
-        </section>
+        <div class="right-card">
+            <h3>ABOUT ORYN</h3>
 
-        <footer>CHECKED ORYN © <span id="year"></span></footer>
-    </main>
+            <p style="color:#888;font-size:12px;line-height:1.8;">
+                A place to connect, discover communities,
+                share experiences, and build connections.
+            </p>
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/app.js"></script>
+    </aside>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/home.js"></script>
+
 </body>
 </html>
