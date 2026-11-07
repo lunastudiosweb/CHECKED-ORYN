@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | CHECKED ORYN</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <main class="auth-container">
+        <a href="index.html" class="brand">
+            <span class="brand-symbol">O</span>
+            CHECKED ORYN
+        </a>
+
+        <section class="auth-card">
+            <div class="auth-heading">
+                <span class="eyebrow">WELCOME BACK</span>
+                <h1>Good to see you.</h1>
+                <p>Log in to continue to CHECKED ORYN.</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div id="loginMessage" class="message" role="status"></div>
+
+                <button type="submit" id="loginButton">
+                    Log in <span>→</span>
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                Don't have an account?
+                <a href="register.html">Create one</a>
+            </p>
+        </section>
+
+        <footer>
+            CHECKED ORYN © <span id="year"></span>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
