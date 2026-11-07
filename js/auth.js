@@ -1,8 +1,12 @@
 
-const registerForm = document.getElementById("registerForm");
+const client = window.supabaseClient;
 
-const registerMessage = document.getElementById("registerMessage");
-const registerButton = document.getElementById("registerButton");
+function showMessage(element, message, type) {
+    if (!element) return;
+
+    element.textContent = message;
+    element.className = `message show ${type}`;
+}
 
 const yearElement = document.getElementById("year");
 
@@ -10,88 +14,50 @@ if (yearElement) {
     yearElement.textContent = new Date().getFullYear();
 }
 
-function showAuthMessage(message, type) {
-    registerMessage.textContent = message;
-    registerMessage.className = `message show ${type}`;
-}
+// REGISTRATION
+const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
+    const message = document.getElementById("registerMessage");
+    const button = document.getElementById("registerButton");
+
     registerForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const username = document
-            .getElementById("username")
-            .value.trim();
-
-        const email = document
-            .getElementById("email")
-            .value.trim();
-
-        const password = document
-            .getElementById("password")
-            .value;
-
-        const confirmPassword = document
-            .getElementById("confirmPassword")
-            .value;
-
-        registerMessage.className = "message";
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
 
         if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) {
-            showAuthMessage(
-                "Username must be 3–24 characters and contain only letters, numbers or underscores.",
-                "error"
-            );
-            return;
+            return showMessage(message, "Username must be 3–24 characters and use only letters, numbers or underscores.", "error");
         }
 
         if (password.length < 8) {
-            showAuthMessage(
-                "Your password must contain at least 8 characters.",
-                "error"
-            );
-            return;
+            return showMessage(message, "Password must contain at least 8 characters.", "error");
         }
 
         if (password !== confirmPassword) {
-            showAuthMessage(
-                "Your passwords do not match.",
-                "error"
-            );
-            return;
+            return showMessage(message, "Passwords do not match.", "error");
         }
 
-        registerButton.disabled = true;
-        registerButton.textContent = "Creating account...";
+        button.disabled = true;
+        button.textContent = "Creating account...";
 
         try {
-            const client = window.supabaseClient;
+            const { data: existing, error: lookupError } = await client
+                .from("profiles")
+                .select("id")
+                .ilike("username", username)
+                .maybeSingle();
 
-            if (!client) {
-                throw new Error("Supabase is not initialized.");
-            }
+            if (lookupError) throw lookupError;
 
-            // Check whether the username is already taken.
-            const { data: existingUser, error: lookupError } =
-                await client
-                    .from("profiles")
-                    .select("id")
-                    .ilike("username", username)
-                    .maybeSingle();
-
-            if (lookupError) {
-                throw lookupError;
-            }
-
-            if (existingUser) {
-                showAuthMessage(
-                    "That username is already taken. Try another one.",
-                    "error"
-                );
+            if (existing) {
+                showMessage(message, "That username is already taken.", "error");
                 return;
             }
 
-            // Create the Supabase account.
             const { data, error } = await client.auth.signUp({
                 email,
                 password,
@@ -103,40 +69,65 @@ if (registerForm) {
                 }
             });
 
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
 
             if (data.session) {
-                showAuthMessage(
-                    "Your account has been created! Redirecting...",
-                    "success"
-                );
+                showMessage(message, "Account created! Taking you to CHECKED ORYN...", "success");
 
                 setTimeout(() => {
                     window.location.href = "home.html";
-                }, 1200);
+                }, 1000);
             } else {
-                showAuthMessage(
-                    "Account created! Check your email for the confirmation link. After confirming, you can log in.",
-                    "success"
-                );
+                showMessage(message, "Account created! Check your email for a confirmation link. Then log in.", "success");
+                registerForm.reset();
             }
-
-            registerForm.reset();
 
         } catch (error) {
             console.error("Registration error:", error);
-
-            showAuthMessage(
-                error.message || "Something went wrong. Please try again.",
-                "error"
-            );
-
+            showMessage(message, error.message || "Registration failed. Please try again.", "error");
         } finally {
-            registerButton.disabled = false;
-            registerButton.innerHTML =
-                'Create account <span>→</span>';
+            button.disabled = false;
+            button.innerHTML = 'Create account <span>→</span>';
+        }
+    });
+}
+
+// LOGIN
+const loginForm = document.getElementById("loginForm");
+
+if (loginForm) {
+    const message = document.getElementById("loginMessage");
+    const button = document.getElementById("loginButton");
+
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        button.disabled = true;
+        button.textContent = "Logging in...";
+
+        try {
+            const { error } = await client.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) throw error;
+
+            showMessage(message, "Login successful! Redirecting...", "success");
+
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, 700);
+
+        } catch (error) {
+            console.error("Login error:", error);
+            showMessage(message, "Login failed. Check your email and password, and make sure your email is confirmed.", "error");
+        } finally {
+            button.disabled = false;
+            button.innerHTML = 'Log in <span>→</span>';
         }
     });
 }
