@@ -22,7 +22,11 @@ const state = {
     profiles: new Map(),
     pendingFile: null,
     realtime: null,
-    sending: false
+    sending: false,
+    nicknames: new Map(),    // user id -> nickname only I can see
+    typingChannel: null,
+    typingTimer: null,
+    lastTypingSent: 0
 };
 
 const $ = id => document.getElementById(id);
@@ -44,6 +48,8 @@ const messageInput = $("messageInput");
 // ---------------------------------------------------------
 
 function nameOf(id) {
+    if (id !== state.me?.id && state.nicknames.has(id)) return state.nicknames.get(id);
+
     const p = state.profiles.get(id);
     return p?.display_name || p?.username || "Unknown user";
 }
@@ -105,8 +111,15 @@ function recall(key) {
 }
 
 function closeModals() {
-    $("lightbox").hidden = true;
+    document.querySelectorAll(".modal-backdrop").forEach(m => { m.hidden = true; });
+    hideDmMenu();
 }
+
+document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+    backdrop.addEventListener("mousedown", event => {
+        if (event.target === backdrop) closeModals();
+    });
+});
 
 document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeModals));
 $("lightbox").addEventListener("click", closeModals);
@@ -312,18 +325,19 @@ function makeImage(url, alt) {
 }
 
 function buildMessage(message) {
-    const row = el("div", "msg");
+    const mine = message.sender_id === state.me.id;
+
+    const row = el("div", "msg" + (mine ? " mine" : ""));
     row.dataset.id = message.id;
 
-    row.append(el("div", "avatar", initialOf(message.sender_id)));
+    // Mine on the right (no avatar/name), theirs on the left.
+    if (!mine) row.append(el("div", "avatar", initialOf(message.sender_id)));
 
     const body = el("div", "msg-body");
     const head = el("div", "msg-head");
 
-    head.append(
-        el("span", "msg-author", nameOf(message.sender_id)),
-        el("span", "msg-time", formatTime(message.created_at))
-    );
+    if (!mine) head.append(el("span", "msg-author", nameOf(message.sender_id)));
+    head.append(el("span", "msg-time", formatTime(message.created_at)));
     body.append(head);
 
     const text = (message.content || "").trim();
@@ -376,6 +390,9 @@ async function openConversation(convId) {
     $("chatTitle").textContent = nameOf(conv.other);
     messageInput.placeholder = `Message ${nameOf(conv.other)}`;
 
+    $("dmSettingsBtn").hidden = false;
+    joinTypingChannel(convId);
+
     renderConversations();
     await loadMessages();
     messageInput.focus();
@@ -395,6 +412,250 @@ async function startConversationWith(userId) {
 
     await loadConversations();
     await openConversation(data);
+}
+
+// ---------------------------------------------------------
+// NICKNAMES (private to you)
+// ---------------------------------------------------------
+
+async function loadNicknames() {
+    const { data, error } = await db
+        .from("dm_nicknames")
+        .select("target_id, nickname")
+        .eq("owner_id", state.me.id);
+
+    if (error) {
+        // Table not created yet: DMs still work, just without nicknames.
+        console.warn("Nicknames unavailable (run supabase/dm-extras.sql):", error.message);
+        return;
+    }
+
+    state.nicknames = new Map((data || []).map(n => [n.target_id, n.nickname]));
+}
+
+function openNicknameModal() {
+    const conv = activeConversation();
+    if (!conv) return;
+
+    const real = state.profiles.get(conv.other);
+    $("nickTitle").textContent = `Nickname for ${real?.display_name || real?.username || "this person"}`;
+    $("nickInput").value = state.nicknames.get(conv.other) || "";
+    $("nickError").textContent = "";
+
+    $("nickModal").hidden = false;
+    setTimeout(() => $("nickInput").focus(), 30);
+}
+
+$("nickForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const conv = activeConversation();
+    if (!conv) return;
+
+    const nickname = $("nickInput").value.trim().slice(0, 40);
+    let error;
+
+    if (nickname) {
+        ({ error } = await db
+            .from("dm_nicknames")
+            .upsert({ owner_id: state.me.id, target_id: conv.other, nickname }, { onConflict: "owner_id,target_id" }));
+    } else {
+        ({ error } = await db
+            .from("dm_nicknames")
+            .delete()
+            .eq("owner_id", state.me.id)
+            .eq("target_id", conv.other));
+    }
+
+    if (error) {
+        console.error("Nickname error:", error);
+        $("nickError").textContent = /does not exist|schema cache/i.test(error.message)
+            ? "Run supabase/dm-extras.sql in the Supabase SQL Editor first."
+            : error.message;
+        return;
+    }
+
+    if (nickname) state.nicknames.set(conv.other, nickname);
+    else state.nicknames.delete(conv.other);
+
+    closeModals();
+
+    $("chatTitle").textContent = nameOf(conv.other);
+    messageInput.placeholder = `Message ${nameOf(conv.other)}`;
+    renderConversations();
+    await loadMessages();
+    toast(nickname ? "Nickname saved." : "Nickname removed.");
+});
+
+// ---------------------------------------------------------
+// TYPING INDICATOR (live, never stored)
+// ---------------------------------------------------------
+
+function typingEnabled() {
+    return recall("oryn:typing") !== "off";
+}
+
+function joinTypingChannel(convId) {
+    leaveTypingChannel();
+
+    const channel = db.channel("typing-" + convId, { config: { broadcast: { self: false } } });
+
+    channel.on("broadcast", { event: "typing" }, ({ payload }) => {
+        if (!payload || payload.user === state.me.id) return;
+        if (convId !== state.activeId || !typingEnabled()) return;
+        showTyping();
+    });
+
+    channel.subscribe();
+    state.typingChannel = channel;
+}
+
+function leaveTypingChannel() {
+    if (state.typingChannel) {
+        db.removeChannel(state.typingChannel);
+        state.typingChannel = null;
+    }
+    hideTyping();
+}
+
+function showTyping() {
+    const other = activeConversation()?.other;
+    if (!other) return;
+
+    $("typingLine").textContent = `${nameOf(other)} is typing…`;
+    $("typingLine").hidden = false;
+
+    clearTimeout(state.typingTimer);
+    state.typingTimer = setTimeout(hideTyping, 4000);
+}
+
+function hideTyping() {
+    clearTimeout(state.typingTimer);
+    $("typingLine").hidden = true;
+}
+
+function announceTyping() {
+    if (!typingEnabled() || !state.typingChannel) return;
+
+    const now = Date.now();
+    if (now - state.lastTypingSent < 2000) return;
+    state.lastTypingSent = now;
+
+    state.typingChannel.send({ type: "broadcast", event: "typing", payload: { user: state.me.id } });
+}
+
+// ---------------------------------------------------------
+// COG MENU: nickname, typing on/off, delete all my messages
+// ---------------------------------------------------------
+
+function hideDmMenu() {
+    const menu = $("dmMenu");
+    menu.hidden = true;
+    menu.replaceChildren();
+}
+
+$("dmSettingsBtn").addEventListener("click", event => {
+    event.stopPropagation();
+
+    const menu = $("dmMenu");
+
+    if (!menu.hidden) {
+        hideDmMenu();
+        return;
+    }
+
+    const conv = activeConversation();
+    if (!conv) return;
+
+    menu.replaceChildren();
+    menu.append(el("div", "menu-head", nameOf(conv.other)));
+
+    const nick = el("button", "", state.nicknames.has(conv.other) ? "Change nickname" : "Set nickname");
+    nick.type = "button";
+    nick.addEventListener("click", () => { hideDmMenu(); openNicknameModal(); });
+    menu.append(nick);
+
+    const typing = el("button", "menu-check" + (typingEnabled() ? " on" : ""));
+    typing.type = "button";
+    typing.append(el("span", "", "Show when I'm typing"), el("span", "state", typingEnabled() ? "On" : "Off"));
+    typing.addEventListener("click", () => {
+        remember("oryn:typing", typingEnabled() ? "off" : "on");
+        if (!typingEnabled()) hideTyping();
+        hideDmMenu();
+        toast(typingEnabled() ? "Typing indicator is on." : "Typing indicator is off.");
+    });
+    menu.append(typing);
+
+    menu.append(document.createElement("hr"));
+
+    const wipe = el("button", "danger", "Delete all my messages");
+    wipe.type = "button";
+    wipe.addEventListener("click", () => { hideDmMenu(); deleteAllMine(); });
+    menu.append(wipe);
+
+    menu.hidden = false;
+
+    const box = event.currentTarget.getBoundingClientRect();
+    menu.style.top = box.bottom + 6 + "px";
+    menu.style.left = Math.max(8, box.right - menu.offsetWidth) + "px";
+});
+
+document.addEventListener("click", event => {
+    if (!event.target.closest("#dmMenu")) hideDmMenu();
+});
+
+async function deleteAllMine() {
+    const conv = activeConversation();
+    if (!conv) return;
+
+    if (!confirm(`Delete every message you've sent to ${nameOf(conv.other)}? This can't be undone.`)) return;
+
+    const { data: mine, error: readError } = await db
+        .from("dm_messages")
+        .select("id, attachment_url")
+        .eq("conversation_id", conv.id)
+        .eq("sender_id", state.me.id);
+
+    if (readError) {
+        console.error("Delete-all read error:", readError);
+        toast(errorText(readError));
+        return;
+    }
+
+    if (!mine || mine.length === 0) {
+        toast("You haven't sent any messages here.");
+        return;
+    }
+
+    const { error } = await db
+        .from("dm_messages")
+        .delete()
+        .eq("conversation_id", conv.id)
+        .eq("sender_id", state.me.id);
+
+    if (error) {
+        console.error("Delete-all error:", error);
+        toast(errorText(error));
+        return;
+    }
+
+    // Best effort: remove the uploaded pictures too.
+    const marker = `/${ATTACHMENT_BUCKET}/`;
+    const paths = mine
+        .map(m => m.attachment_url)
+        .filter(Boolean)
+        .map(url => {
+            const i = url.indexOf(marker);
+            return i === -1 ? null : decodeURIComponent(url.slice(i + marker.length).split("?")[0]);
+        })
+        .filter(Boolean);
+
+    if (paths.length) db.storage.from(ATTACHMENT_BUCKET).remove(paths).catch(() => {});
+
+    toast(`Deleted ${mine.length} message${mine.length === 1 ? "" : "s"}.`);
+
+    await loadConversations();
+    await loadMessages();
 }
 
 // ---------------------------------------------------------
@@ -524,6 +785,8 @@ async function onMessageChange(payload) {
         }
 
         if (messageList.querySelector(`[data-id="${CSS.escape(message.id)}"]`)) return;
+
+        if (message.sender_id !== state.me.id) hideTyping();
 
         const stick = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight < 160
             || message.sender_id === state.me.id;
@@ -688,7 +951,10 @@ composer.addEventListener("submit", event => {
     sendMessage();
 });
 
-messageInput.addEventListener("input", autoGrow);
+messageInput.addEventListener("input", () => {
+    autoGrow();
+    if (messageInput.value.trim()) announceTyping();
+});
 
 messageInput.addEventListener("keydown", event => {
     if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
@@ -751,6 +1017,7 @@ async function init() {
 
     await loadProfiles([state.me.id]);
     renderIdentity();
+    await loadNicknames();
 
     if (!(await loadConversations())) return;
 
