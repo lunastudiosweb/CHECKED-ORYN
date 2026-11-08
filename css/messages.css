@@ -1,0 +1,57 @@
+/* Direct messages: builds on servers.css (rail | list | chat) */
+
+.dm-app { grid-template-columns: var(--rail) var(--panel) minmax(0, 1fr); }
+
+.dm-search { position: relative; padding: 12px; border-bottom: 1px solid var(--border); }
+.dm-search input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    background: #171717;
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+}
+.dm-search input:focus { border-color: #666; }
+
+.dm-results {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: calc(100% - 4px);
+    z-index: 20;
+    padding: 6px;
+    border: 1px solid var(--border-hover);
+    border-radius: 10px;
+    background: #141414;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .6);
+}
+.dm-results[hidden] { display: none; }
+.dm-results .none { padding: 10px; color: var(--text-muted); font-size: 12px; }
+
+.person-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 8px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+}
+.person-row:hover, .person-row.active { background: var(--surface-hover); }
+.person-row .avatar { width: 32px; height: 32px; font-size: 12px; }
+.person-row .text { min-width: 0; flex: 1; }
+.person-row strong { display: block; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.person-row .sub { display: block; color: var(--text-muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.conv-del { display: none; }
+
+@media (max-width: 720px) {
+    .dm-app { grid-template-columns: 60px minmax(0, 1fr); }
+}
