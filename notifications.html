@@ -1,0 +1,98 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications — CHECKED ORYN</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/notifications.css">
+</head>
+<body>
+
+<div class="notifications-layout">
+
+    <aside class="notifications-sidebar">
+        <a href="home.html" class="brand">CHECKED ORYN</a>
+
+        <div class="sidebar-label">YOUR SPACE</div>
+
+        <nav class="sidebar-nav">
+            <a href="home.html">Home</a>
+            <a href="explore.html">Explore</a>
+            <a href="communities.html">Communities</a>
+            <a href="messages.html">Messages</a>
+            <a href="notifications.html" class="active">Notifications</a>
+            <a href="profile.html">Profile</a>
+            <a href="settings.html">Settings</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button">Log out</button>
+    </aside>
+
+    <main class="notifications-main">
+
+        <header class="notifications-header">
+            <div>
+                <p class="eyebrow">YOUR ACTIVITY</p>
+                <h1>Notifications</h1>
+                <p class="subtitle">Everything happening around your posts.</p>
+            </div>
+
+            <button id="markAllRead" class="mark-all-button">
+                Mark all as read
+            </button>
+        </header>
+
+        <section class="notification-summary">
+            <div>
+                <span class="summary-label">UNREAD</span>
+                <strong id="unreadCount">0</strong>
+            </div>
+            <div>
+                <span class="summary-label">ALL ACTIVITY</span>
+                <strong id="totalCount">0</strong>
+            </div>
+        </section>
+
+        <section class="notification-panel">
+
+            <div class="notification-panel-header">
+                <h2>Your activity</h2>
+
+                <select id="notificationFilter">
+                    <option value="all">All activity</option>
+                    <option value="unread">Unread</option>
+                    <option value="read">Read</option>
+                </select>
+            </div>
+
+            <div id="notificationsList" class="notifications-list">
+                <div class="notification-loading">
+                    Loading notifications...
+                </div>
+            </div>
+
+            <div id="notificationMessage" class="notification-message"></div>
+
+        </section>
+
+        <footer class="notifications-footer">
+            CHECKED ORYN © 2026
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/notifications.js"></script>
+
+</body>
+</html>
+```
