@@ -48,6 +48,8 @@
         <header class="chat-header">
             <button class="icon-btn mobile-only" id="channelsToggle" type="button" aria-label="Show conversations">☰</button>
             <h1 id="chatTitle">Messages</h1>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="dmSettingsBtn" type="button" aria-label="Conversation options" title="Conversation options" hidden>⚙</button>
         </header>
 
         <div class="message-list" id="messageList"></div>
@@ -57,6 +59,8 @@
             <h2>Your messages</h2>
             <p>Search for someone on the left to start a private conversation.</p>
         </div>
+
+        <p class="typing-line" id="typingLine" hidden></p>
 
         <div class="attach-preview" id="attachPreview" hidden></div>
 
@@ -74,6 +78,24 @@
 <div class="modal-backdrop lightbox" id="lightbox" hidden>
     <button class="modal-close" data-close type="button" aria-label="Close">✕</button>
     <img id="lightboxImg" alt="">
+</div>
+
+<!-- conversation options (cog) -->
+<div class="member-menu" id="dmMenu" hidden></div>
+
+<!-- nickname -->
+<div class="modal-backdrop" id="nickModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nickTitle">
+        <button class="modal-close" data-close type="button" aria-label="Close">✕</button>
+        <h2 id="nickTitle">Set nickname</h2>
+        <form id="nickForm">
+            <label for="nickInput">Nickname</label>
+            <input id="nickInput" type="text" maxlength="40" placeholder="Only you can see this" autocomplete="off">
+            <p class="form-hint">Shown instead of their name in your messages. Leave empty to remove it.</p>
+            <p class="form-error" id="nickError"></p>
+            <button class="primary-button wide" type="submit">Save nickname</button>
+        </form>
+    </div>
 </div>
 
 <div class="toast" id="toast" role="status" hidden></div>
