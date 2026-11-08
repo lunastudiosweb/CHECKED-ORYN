@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings — CHECKED ORYN</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/settings.css">
+</head>
+
+<body>
+
+<div class="dashboard settings-dashboard">
+
+    <aside class="dashboard-sidebar">
+
+        <a href="index.html" class="dashboard-logo">CHECKED ORYN</a>
+
+        <p class="sidebar-label">YOUR SPACE</p>
+
+        <nav class="sidebar-nav">
+            <a href="home.html"><span class="sidebar-icon">⌂</span> Home</a>
+            <a href="explore.html"><span class="sidebar-icon">⌕</span> Explore</a>
+            <a href="servers.html"><span class="sidebar-icon">◈</span> Servers</a>
+            <a href="messages.html"><span class="sidebar-icon">▤</span> Messages</a>
+            <a href="notifications.html"><span class="sidebar-icon">♧</span> Notifications</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p class="sidebar-label">ACCOUNT</p>
+            <nav class="sidebar-nav">
+                <a href="profile.html"><span class="sidebar-icon">◉</span> Profile</a>
+                <a href="settings.html" class="active"><span class="sidebar-icon">⚙</span> Settings</a>
+            </nav>
+        </div>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Settings</h1>
+                <p>Manage your profile, sign-in details and account.</p>
+            </div>
+            <div class="header-avatar profile-avatar" id="headerAvatar">?</div>
+        </header>
+
+        <!-- PROFILE -->
+        <section class="settings-card" id="profileCard">
+            <h2>Profile</h2>
+            <p class="card-note">How you appear to other people on ORYN.</p>
+
+            <form id="profileForm" novalidate>
+                <div class="field">
+                    <label for="displayName">Display name</label>
+                    <input id="displayName" type="text" maxlength="40" autocomplete="nickname" required>
+                </div>
+
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" maxlength="24" autocomplete="username" required>
+                    <small>3–24 characters: letters, numbers and underscores.</small>
+                </div>
+
+                <div class="form-row">
+                    <button class="primary-button" id="profileSave" type="submit">Save profile</button>
+                    <span class="set-msg" id="profileMsg" role="status"></span>
+                </div>
+            </form>
+        </section>
+
+        <!-- EMAIL -->
+        <section class="settings-card">
+            <h2>Email</h2>
+            <p class="card-note">Changing it sends a confirmation link to the new address.</p>
+
+            <form id="emailForm" novalidate>
+                <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" type="email" autocomplete="email" required>
+                </div>
+
+                <div class="form-row">
+                    <button class="primary-button" id="emailSave" type="submit">Update email</button>
+                    <span class="set-msg" id="emailMsg" role="status"></span>
+                </div>
+            </form>
+        </section>
+
+        <!-- PASSWORD -->
+        <section class="settings-card">
+            <h2>Password</h2>
+            <p class="card-note">Use at least 8 characters.</p>
+
+            <form id="passwordForm" novalidate>
+                <div class="field">
+                    <label for="currentPassword">Current password</label>
+                    <input id="currentPassword" type="password" autocomplete="current-password" required>
+                </div>
+
+                <div class="field">
+                    <label for="newPassword">New password</label>
+                    <input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+                </div>
+
+                <div class="field">
+                    <label for="confirmPassword">Confirm new password</label>
+                    <input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+                </div>
+
+                <div class="form-row">
+                    <button class="primary-button" id="passwordSave" type="submit">Change password</button>
+                    <span class="set-msg" id="passwordMsg" role="status"></span>
+                </div>
+            </form>
+        </section>
+
+        <!-- SESSIONS -->
+        <section class="settings-card">
+            <h2>Sessions</h2>
+            <p class="card-note">Signed in somewhere you don't trust? Sign out everywhere.</p>
+
+            <div class="form-row">
+                <button class="ghost-button" id="logoutButton" type="button">Log out</button>
+                <button class="ghost-button" id="logoutAllButton" type="button">Log out on all devices</button>
+                <span class="set-msg" id="sessionMsg" role="status"></span>
+            </div>
+        </section>
+
+        <!-- DANGER -->
+        <section class="settings-card danger-card">
+            <h2>Delete account</h2>
+            <p class="card-note">
+                Permanently deletes your profile, your messages, and any servers you own.
+                This cannot be undone.
+            </p>
+
+            <form id="deleteForm" novalidate>
+                <div class="field">
+                    <label for="deleteConfirm">Type your username to confirm</label>
+                    <input id="deleteConfirm" type="text" autocomplete="off">
+                </div>
+
+                <div class="form-row">
+                    <button class="danger-button" id="deleteSave" type="submit">Delete my account</button>
+                    <span class="set-msg" id="deleteMsg" role="status"></span>
+                </div>
+            </form>
+        </section>
+
+        <footer class="dashboard-footer">
+            CHECKED ORYN © <span id="year"></span>
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/settings.js"></script>
+
+</body>
+</html>
