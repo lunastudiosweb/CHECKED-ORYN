@@ -55,3 +55,58 @@
 @media (max-width: 720px) {
     .dm-app { grid-template-columns: 60px minmax(0, 1fr); }
 }
+
+/* ---------- chat bubbles: mine on the right, theirs on the left ---------- */
+
+.dm-app .msg { align-items: flex-end; }
+.dm-app .msg:hover { background: transparent; }
+
+.dm-app .msg-body {
+    flex: 0 1 auto;
+    max-width: min(560px, 78%);
+    padding: 9px 14px 10px;
+    border-radius: 16px 16px 16px 4px;
+    background: #1a1a1a;
+}
+
+.dm-app .msg.mine { flex-direction: row-reverse; }
+
+.dm-app .msg.mine .msg-body {
+    border-radius: 16px 16px 4px 16px;
+    background: #f2f2f2;
+    color: #000;
+}
+
+.dm-app .msg.mine .msg-head { justify-content: flex-end; }
+.dm-app .msg.mine .msg-text { color: #000; }
+.dm-app .msg.mine .msg-time { color: #6b6b6b; }
+.dm-app .msg.mine .msg-text a { color: #0b57d0; }
+.dm-app .msg.mine .msg-image { border-color: rgba(0, 0, 0, .15); }
+
+.dm-app .msg-delete { top: 50%; transform: translateY(-50%); }
+.dm-app .msg.mine .msg-delete { right: auto; left: 18px; }
+
+@media (max-width: 720px) {
+    .dm-app .msg-delete { top: auto; transform: none; }
+    .dm-app .msg-body { max-width: 86%; }
+}
+
+/* ---------- typing indicator ---------- */
+
+.typing-line {
+    margin: 0 20px 6px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-style: italic;
+}
+.typing-line[hidden] { display: none; }
+
+.menu-check {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.menu-check .state { color: var(--text-muted); font-size: 12px; }
+.menu-check.on .state { color: #7ee787; }
+.member-menu hr { border: 0; border-top: 1px solid var(--border); margin: 4px 0; }
