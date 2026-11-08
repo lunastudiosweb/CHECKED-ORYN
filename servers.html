@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Servers — CHECKED ORYN</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/servers.css">
+</head>
+
+<body>
+
+<div class="srv-app" id="srvApp">
+
+    <!-- SERVER RAIL -->
+    <nav class="srv-rail" aria-label="Servers">
+        <a href="home.html" class="rail-btn rail-home" title="Back to Home">⌂</a>
+        <div class="rail-sep"></div>
+        <div class="rail-list" id="serverList"></div>
+        <button class="rail-btn rail-add" id="addServerBtn" type="button" title="Create or join a server">+</button>
+    </nav>
+
+    <!-- CHANNEL PANEL -->
+    <aside class="srv-channels" id="channelPanel">
+
+        <button class="srv-header" id="serverHeaderBtn" type="button" disabled>
+            <span id="serverName">Servers</span>
+            <span class="srv-header-icon">⚙</span>
+        </button>
+
+        <div class="channel-group-head">
+            <span>TEXT CHANNELS</span>
+            <button id="addChannelBtn" type="button" title="Create channel" hidden>+</button>
+        </div>
+
+        <div class="channel-list" id="channelList"></div>
+
+        <div class="user-panel">
+            <div class="avatar" id="meAvatar">?</div>
+            <div class="user-panel-text">
+                <strong id="meName">Loading…</strong>
+                <span id="meRole">&nbsp;</span>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- CHAT -->
+    <main class="srv-chat">
+
+        <header class="chat-header">
+            <button class="icon-btn mobile-only" id="channelsToggle" type="button" aria-label="Show channels">☰</button>
+            <h1 id="chatTitle">Welcome</h1>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="membersToggle" type="button" aria-label="Toggle member list" title="Members">☷</button>
+        </header>
+
+        <div class="message-list" id="messageList"></div>
+
+        <div class="srv-empty" id="emptyState" hidden>
+            <div class="srv-empty-icon">◈</div>
+            <h2>You're not in a server yet</h2>
+            <p>Create your own, or join one with an invite code.</p>
+            <button class="primary-button" id="emptyAddBtn" type="button">Create or join a server</button>
+        </div>
+
+        <div class="attach-preview" id="attachPreview" hidden></div>
+
+        <form class="composer" id="composer" autocomplete="off" hidden>
+            <button class="attach-btn" id="attachBtn" type="button" title="Attach an image or GIF" aria-label="Attach an image or GIF">＋</button>
+            <input type="file" id="fileInput" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+            <textarea id="messageInput" rows="1" maxlength="2000" placeholder="Message"></textarea>
+            <button class="primary-button" id="sendBtn" type="submit">Send</button>
+        </form>
+
+        <p class="composer-note" id="composerNote" hidden></p>
+
+    </main>
+
+    <!-- MEMBERS -->
+    <aside class="srv-members" id="memberPanel">
+        <div class="members-title">MEMBERS</div>
+        <div id="memberList"></div>
+    </aside>
+
+</div>
+
+
+<!-- ===== MODALS ===== -->
+
+<!-- create / join -->
+<div class="modal-backdrop" id="serverModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="serverModalTitle">
+        <button class="modal-close" data-close type="button" aria-label="Close">✕</button>
+        <h2 id="serverModalTitle">Add a server</h2>
+
+        <div class="modal-tabs">
+            <button type="button" class="active" data-tab="create">Create</button>
+            <button type="button" data-tab="join">Join</button>
+        </div>
+
+        <form id="createServerForm" data-panel="create">
+            <label for="newServerName">Server name</label>
+            <input id="newServerName" type="text" maxlength="50" minlength="2" required placeholder="My community">
+            <p class="form-error" data-error></p>
+            <button class="primary-button wide" type="submit">Create server</button>
+        </form>
+
+        <form id="joinServerForm" data-panel="join" hidden>
+            <label for="inviteCode">Invite code</label>
+            <input id="inviteCode" type="text" maxlength="40" required placeholder="e.g. 3f9a1c2b">
+            <p class="form-error" data-error></p>
+            <button class="primary-button wide" type="submit">Join server</button>
+        </form>
+    </div>
+</div>
+
+<!-- create channel -->
+<div class="modal-backdrop" id="channelModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="channelModalTitle">
+        <button class="modal-close" data-close type="button" aria-label="Close">✕</button>
+        <h2 id="channelModalTitle">Create channel</h2>
+        <form id="createChannelForm">
+            <label for="newChannelName">Channel name</label>
+            <input id="newChannelName" type="text" maxlength="32" required placeholder="general-chat">
+            <p class="form-hint">Lowercase letters, numbers and dashes.</p>
+            <p class="form-error" data-error></p>
+            <button class="primary-button wide" type="submit">Create channel</button>
+        </form>
+    </div>
+</div>
+
+<!-- server settings -->
+<div class="modal-backdrop" id="settingsModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <button class="modal-close" data-close type="button" aria-label="Close">✕</button>
+        <h2 id="settingsTitle">Server settings</h2>
+
+        <section class="settings-block">
+            <label>Invite code</label>
+            <div class="invite-row">
+                <code id="inviteDisplay">—</code>
+                <button class="ghost-btn" id="copyInviteBtn" type="button">Copy</button>
+                <button class="ghost-btn" id="resetInviteBtn" type="button" hidden>Reset</button>
+            </div>
+            <p class="form-hint">Share this code so people can join from “Add a server → Join”.</p>
+        </section>
+
+        <form class="settings-block" id="renameServerForm" hidden>
+            <label for="renameServerInput">Server name</label>
+            <div class="invite-row">
+                <input id="renameServerInput" type="text" maxlength="50" minlength="2" required>
+                <button class="ghost-btn" type="submit">Save</button>
+            </div>
+        </form>
+
+        <section class="settings-block">
+            <label>Roles</label>
+            <ul class="role-legend">
+                <li><span class="role-badge role-owner">Owner</span> Everything, including deleting the server and appointing admins.</li>
+                <li><span class="role-badge role-admin">Admin</span> Manage channels, appoint moderators, remove members, delete messages.</li>
+                <li><span class="role-badge role-moderator">Moderator</span> Delete messages and remove regular members.</li>
+                <li><span class="role-badge role-member">Member</span> Chat and share images &amp; GIFs.</li>
+            </ul>
+        </section>
+
+        <p class="form-error" data-error></p>
+
+        <div class="danger-row">
+            <button class="danger-btn" id="leaveServerBtn" type="button" hidden>Leave server</button>
+            <button class="danger-btn" id="deleteServerBtn" type="button" hidden>Delete server</button>
+        </div>
+    </div>
+</div>
+
+<!-- image viewer -->
+<div class="modal-backdrop lightbox" id="lightbox" hidden>
+    <button class="modal-close" data-close type="button" aria-label="Close">✕</button>
+    <img id="lightboxImg" alt="">
+</div>
+
+<!-- member action menu -->
+<div class="member-menu" id="memberMenu" hidden></div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/servers.js"></script>
+
+</body>
+</html>
