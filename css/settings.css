@@ -88,3 +88,27 @@
     .settings-dashboard .sidebar-bottom { margin-top: 14px; }
     .settings-dashboard .dashboard-main { padding: 22px 18px; }
 }
+
+/* Profile picture */
+.avatar-row { display: flex; align-items: center; gap: 22px; }
+
+.avatar-preview,
+.header-avatar.has-image {
+    display: grid;
+    place-items: center;
+    background-size: cover;
+    background-position: center;
+}
+
+.avatar-preview {
+    width: 88px;
+    height: 88px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid #383838;
+    background-color: #242424;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.avatar-row .set-msg { display: block; margin-top: 10px; }
